@@ -37,11 +37,14 @@
             color: red; 
             font-family: 'Great Vibes', cursive; 
             opacity: 0;
-            animation: fadeIn 3s ease-in-out forwards, typing 4s steps(40, end) forwards;
             white-space: nowrap;
             overflow: hidden;
-            width: 0;
         }
+        .fadeIn { animation: fadeIn 3s ease-in-out forwards; }
+        .typing { animation: typing 4s steps(40, end) forwards; width: 0; }
+        .zoomIn { animation: zoomIn 3s ease-in-out forwards; }
+        .bounce { animation: bounce 3s infinite; }
+        
         @keyframes fadeIn {
             0% { opacity: 0; }
             100% { opacity: 1; }
@@ -50,12 +53,24 @@
             0% { width: 0; }
             100% { width: 100%; }
         }
+        @keyframes zoomIn {
+            0% { transform: scale(0.5); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
         #countdown { font-size: 24px; margin-top: 10px; }
     </style>
 </head>
 <body>
+    <audio autoplay loop>
+        <source src="https://www.bensound.com/bensound-music/bensound-love.mp3" type="audio/mp3">
+        Your browser does not support the audio element.
+    </audio>
     <div class="heart"></div>
-    <div id="message">I love you Peacy, my big boss ~ From Morgan</div>
+    <div id="message" class="fadeIn">I love you Peacy, my big boss ~ From Morgan</div>
     <div id="countdown"></div>
 
     <script>
@@ -72,8 +87,18 @@
             document.getElementById("countdown").innerText = `Valentine's Day in: ${days}d ${hours}h ${minutes}m ${seconds}s`;
         }
 
+        function changeAnimation() {
+            const message = document.getElementById("message");
+            const animations = ["fadeIn", "typing", "zoomIn", "bounce"];
+            message.className = "";
+            setTimeout(() => {
+                message.classList.add(animations[Math.floor(Math.random() * animations.length)]);
+            }, 100);
+        }
+
         setInterval(updateCountdown, 1000);
         updateCountdown();
+        setInterval(changeAnimation, 20000);
     </script>
 </body>
 </html>

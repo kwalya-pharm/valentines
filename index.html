@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Valentine's Countdown</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap');
+        body { text-align: center; background-color: #111; color: white; font-family: Arial, sans-serif; }
+        .heart {
+            position: relative;
+            width: 100px;
+            height: 100px;
+            background-color: red;
+            transform: rotate(-45deg);
+            animation: beat 1s infinite alternate;
+            margin: 50px auto;
+        }
+        .heart::before, .heart::after {
+            content: "";
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            background-color: red;
+            border-radius: 50%;
+        }
+        .heart::before { top: -50px; left: 0; }
+        .heart::after { left: 50px; top: 0; }
+
+        @keyframes beat {
+            0% { transform: scale(1) rotate(-45deg); }
+            100% { transform: scale(1.2) rotate(-45deg); }
+        }
+        #message { 
+            font-size: 24px; 
+            margin-top: 20px; 
+            color: red; 
+            font-family: 'Great Vibes', cursive; 
+        }
+        #countdown { font-size: 24px; margin-top: 10px; }
+    </style>
+</head>
+<body>
+    <div class="heart"></div>
+    <div id="message">I love you Peacy, my big boss ~ From Morgan</div>
+    <div id="countdown"></div>
+
+    <script>
+        function updateCountdown() {
+            const valentine = new Date(new Date().getFullYear(), 1, 14).getTime();
+            const now = new Date().getTime();
+            const difference = valentine - now;
+
+            const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+
+            document.getElementById("countdown").innerText = `Valentine's Day in: ${days}d ${hours}h ${minutes}m ${seconds}s`;
+        }
+
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+    </script>
+</body>
+</html>

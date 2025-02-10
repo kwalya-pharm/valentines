@@ -7,6 +7,7 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap');
         body { text-align: center; background-color: #111; color: white; font-family: Arial, sans-serif; overflow: hidden; }
+        
         .heart {
             position: relative;
             width: 100px;
@@ -31,6 +32,7 @@
             0% { transform: scale(1) rotate(-45deg); }
             100% { transform: scale(1.2) rotate(-45deg); }
         }
+
         #message { 
             font-size: 24px; 
             margin-top: 20px; 
@@ -61,7 +63,9 @@
             0%, 100% { transform: translateY(0); }
             50% { transform: translateY(-10px); }
         }
+
         #countdown { font-size: 24px; margin-top: 10px; }
+
         #musicButton {
             margin-top: 20px;
             padding: 10px 20px;
@@ -75,26 +79,35 @@
         #musicButton:hover {
             background-color: darkred;
         }
-        .firework {
+
+        .firework, .shooting-star {
             position: absolute;
             width: 5px;
             height: 5px;
             background-color: yellow;
             border-radius: 50%;
-            animation: explode 1.5s linear forwards;
+            opacity: 0.8;
         }
+
         @keyframes explode {
             0% { transform: scale(1); opacity: 1; }
             100% { transform: scale(5); opacity: 0; }
         }
+
+        @keyframes shooting {
+            0% { transform: translate(0, 0); opacity: 1; }
+            100% { transform: translate(200px, 200px); opacity: 0; }
+        }
     </style>
 </head>
 <body>
-    <audio id="backgroundMusic" loop>
+    <audio id="backgroundMusic">
         <source src="love.mp3" type="audio/mp3">
         Your browser does not support the audio element.
     </audio>
+
     <button id="musicButton">Play Music</button>
+    
     <div class="heart"></div>
     <div id="message" class="fadeIn">I love you Peacy, my big boss ~ From Morgan</div>
     <div id="countdown"></div>
@@ -144,26 +157,37 @@
             firework.classList.add("firework");
             document.body.appendChild(firework);
 
-            const x = Math.random() * window.innerWidth;
-            const y = Math.random() * (window.innerHeight / 2);
-            firework.style.left = `${x}px`;
-            firework.style.top = `${y}px`;
+            firework.style.left = `${Math.random() * window.innerWidth}px`;
+            firework.style.top = `${Math.random() * (window.innerHeight / 2)}px`;
+            firework.style.animation = "explode 1.5s linear forwards";
 
             setTimeout(() => firework.remove(), 1500);
         }
 
-        function startFireworks() {
-            setInterval(createFirework, 500);
+        function createShootingStar() {
+            const star = document.createElement("div");
+            star.classList.add("shooting-star");
+            document.body.appendChild(star);
+
+            star.style.left = `${Math.random() * window.innerWidth}px`;
+            star.style.top = `${Math.random() * window.innerHeight}px`;
+            star.style.animation = "shooting 2s linear forwards";
+
+            setTimeout(() => star.remove(), 2000);
         }
 
-        // Ensure the button triggers the music
+        function startEffects() {
+            setInterval(createFirework, 500);
+            setInterval(createShootingStar, 2000);
+        }
+
         document.getElementById("musicButton").addEventListener("click", toggleMusic);
 
         setInterval(updateCountdown, 1000);
         updateCountdown();
-        setInterval(changeAnimation, 5000);  // Change animation every 5 seconds
+        setInterval(changeAnimation, 5000);
 
-        setTimeout(startFireworks, 10000);  // Start fireworks after 10 seconds
+        setTimeout(startEffects, 10000);
     </script>
 </body>
 </html>

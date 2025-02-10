@@ -6,7 +6,7 @@
     <title>Valentine's Countdown</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap');
-        body { text-align: center; background-color: #111; color: white; font-family: Arial, sans-serif; }
+        body { text-align: center; background-color: #111; color: white; font-family: Arial, sans-serif; overflow: hidden; }
         .heart {
             position: relative;
             width: 100px;
@@ -44,7 +44,7 @@
         .typing { animation: typing 4s steps(40, end) forwards; width: 0; }
         .zoomIn { animation: zoomIn 3s ease-in-out forwards; }
         .bounce { animation: bounce 3s infinite; }
-        
+
         @keyframes fadeIn {
             0% { opacity: 0; }
             100% { opacity: 1; }
@@ -75,6 +75,18 @@
         #musicButton:hover {
             background-color: darkred;
         }
+        .firework {
+            position: absolute;
+            width: 5px;
+            height: 5px;
+            background-color: yellow;
+            border-radius: 50%;
+            animation: explode 1.5s linear forwards;
+        }
+        @keyframes explode {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(5); opacity: 0; }
+        }
     </style>
 </head>
 <body>
@@ -82,7 +94,7 @@
         <source src="love.mp3" type="audio/mp3">
         Your browser does not support the audio element.
     </audio>
-    <button id="musicButton" onclick="toggleMusic()">Play Music</button>
+    <button id="musicButton">Play Music</button>
     <div class="heart"></div>
     <div id="message" class="fadeIn">I love you Peacy, my big boss ~ From Morgan</div>
     <div id="countdown"></div>
@@ -113,18 +125,45 @@
         function toggleMusic() {
             const music = document.getElementById("backgroundMusic");
             const button = document.getElementById("musicButton");
+
             if (music.paused) {
-                music.play();
-                button.innerText = "Pause Music";
+                music.play().then(() => {
+                    button.innerText = "Pause Music";
+                }).catch(error => {
+                    console.error("Playback failed:", error);
+                    alert("Click anywhere on the page first, then press Play Music.");
+                });
             } else {
                 music.pause();
                 button.innerText = "Play Music";
             }
         }
 
+        function createFirework() {
+            const firework = document.createElement("div");
+            firework.classList.add("firework");
+            document.body.appendChild(firework);
+
+            const x = Math.random() * window.innerWidth;
+            const y = Math.random() * (window.innerHeight / 2);
+            firework.style.left = `${x}px`;
+            firework.style.top = `${y}px`;
+
+            setTimeout(() => firework.remove(), 1500);
+        }
+
+        function startFireworks() {
+            setInterval(createFirework, 500);
+        }
+
+        // Ensure the button triggers the music
+        document.getElementById("musicButton").addEventListener("click", toggleMusic);
+
         setInterval(updateCountdown, 1000);
         updateCountdown();
-        setInterval(changeAnimation, 20000);
+        setInterval(changeAnimation, 5000);  // Change animation every 5 seconds
+
+        setTimeout(startFireworks, 10000);  // Start fireworks after 10 seconds
     </script>
 </body>
 </html>
